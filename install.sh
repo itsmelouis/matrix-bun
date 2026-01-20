@@ -18,17 +18,19 @@ OS=$(uname -s)
 ARCH=$(uname -m)
 
 if [[ "$OS" == "Linux" ]]; then
-  DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST_RELEASE/matrix-bun"
+  ARTIFACT="matrix-bun-linux-x64"
 elif [[ "$OS" == "Darwin" ]]; then
   if [[ "$ARCH" == "arm64" ]]; then
-    DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST_RELEASE/matrix-bun-arm64"
+    ARTIFACT="matrix-bun-darwin-arm64"
   else
-    DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST_RELEASE/matrix-bun"
+    ARTIFACT="matrix-bun-darwin-x64"
   fi
 else
   echo -e "\033[31m✗\033[0m Unsupported OS: $OS"
   exit 1
 fi
+
+DOWNLOAD_URL="https://github.com/$REPO/releases/download/$LATEST_RELEASE/$ARTIFACT"
 
 echo "Downloading matrix-bun ($LATEST_RELEASE) for $OS/$ARCH..."
 curl -fL --progress-bar "$DOWNLOAD_URL" -o "$INSTALL_DIR/$BIN_NAME"

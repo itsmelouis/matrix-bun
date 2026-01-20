@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -12,14 +15,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: linux-x64
-            artifact: matrix-bun
+            artifact: matrix-bun-linux-x64
           - os: macos-latest
-            target: darwin-x64
-            artifact: matrix-bun
-          - os: macos-latest
-            target: darwin-arm64
-            artifact: matrix-bun
+            artifact: matrix-bun-darwin-x64
+          - os: macos-14
+            artifact: matrix-bun-darwin-arm64
 
     steps:
       - uses: actions/checkout@v4
@@ -29,17 +29,9 @@ jobs:
           bun-version: latest
 
       - name: Build executable
-        run: bun build --compile --outfile matrix-bun ./index.ts
-
-      - name: Rename artifact (macOS ARM64)
-        if: matrix.target == 'darwin-arm64'
-        run: mv matrix-bun matrix-bun-arm64
+        run: bun build --compile --outfile ${{ matrix.artifact }} ./index.ts
 
       - name: Upload artifacts
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            matrix-bun
-            matrix-bun-arm64
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ matrix.artifact }}
