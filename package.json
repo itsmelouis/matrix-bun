@@ -1,0 +1,32 @@
+{
+  "name": "matrix-bun",
+  "version": "1.0.0",
+  "description": "Matrix Digital Rain effect CLI - A high-performance terminal animation",
+  "author": "Louis F.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itsmelouis/matrix-bun.git"
+  },
+  "homepage": "https://github.com/itsmelouis/matrix-bun",
+  "bugs": {
+    "url": "https://github.com/itsmelouis/matrix-bun/issues"
+  },
+  "keywords": [
+    "matrix",
+    "terminal",
+    "animation",
+    "cli",
+    "bun",
+    "digital-rain"
+  ],
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

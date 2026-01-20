@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x64
+            artifact: matrix-bun
+          - os: macos-latest
+            target: darwin-x64
+            artifact: matrix-bun
+          - os: macos-latest
+            target: darwin-arm64
+            artifact: matrix-bun
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Build executable
+        run: bun build --compile --outfile matrix-bun ./index.ts
+
+      - name: Rename artifact (macOS ARM64)
+        if: matrix.target == 'darwin-arm64'
+        run: mv matrix-bun matrix-bun-arm64
+
+      - name: Upload artifacts
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            matrix-bun
+            matrix-bun-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
